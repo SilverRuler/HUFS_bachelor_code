@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+
+<title>주민등록번호 검사</title>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+<script language="javascript">
+function check_jumin() { 
+ var jumin=document.getElementById('jumin1').value+document.getElementById('jumin2').value;
+
+ //주민등록 번호 13자리를 검사한다.
+  var fmt = /^\d{6}[1234]\d{6}$/;  //포멧 설정
+  if (!fmt.test(jumin)) {
+   return false;
+  }
+
+  // 생년월일 검사
+  var birthYear = (jumin.charAt(6) <= "2") ? "19" : "20";
+  birthYear += jumin.substr(0, 2);
+  var birthMonth = jumin.substr(2, 2) - 1;
+  var birthDate = jumin.substr(4, 2);
+  var birth = new Date(birthYear, birthMonth, birthDate);
+
+  if ( birth.getYear() % 100 != jumin.substr(0, 2) ||
+       birth.getMonth() != birthMonth ||
+       birth.getDate() != birthDate) {
+     return false;
+  }
+
+  // Check Sum 코드의 유효성 검사
+  var buf = new Array(13);
+  for (var i = 0; i < 13; i++) buf[i] = parseInt(jumin.charAt(i));
+ 
+  multipliers = [2,3,4,5,6,7,8,9,2,3,4,5];
+  for (var sum = 0, i = 0; i < 12; i++) sum += (buf[i] *= multipliers[i]);
+
+  if ((11 - (sum % 11)) % 10 != buf[12]) {
+     return false;
+  }
+
+  
+  return true;
+}
+
+function checks(){
+ if(check_jumin())//올바른 값이 들어왔을 때 실행될 코드
+  alert("올바른 주번입니다.");
+ else//올바른 갑이 들어오지 않았을 때 실행될 코드
+  alert("옳지 않아아~!");
+}
+
+//앞의 텍스트박스에 6자리 글씨가 써지면 자동으로 다음 칸으로 커서가 넘어간다.
+function nextgo(e){  
+  if (e.value.length>=6) {
+   document.getElementById('jumin2').focus();
+  }
+}
+
+</script>
+</head>
+<body>
+
+<input type="text" id="jumin1" name="jumin1" onkeyup="nextgo(this);"/> 
+-<input type="password" id="jumin2" name="jumin2" />
+
+<input type="button" onclick="checks();" value="검사"/>
+
+</body>
+</html>

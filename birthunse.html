@@ -1,0 +1,253 @@
+﻿<html>
+	<head>
+		<title>201104136_MMS_Assignment#1</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="css/uikit.almost-flat.min.css" />
+		<script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.26.1/js/uikit.min.js"></script>
+		<style>
+			.uk-panel {
+				margin-bottom: 16px;
+			}
+		</style>
+
+	</head>
+	<body class="uk-height-1-1" style="background-color: #593C1F;">
+		<nav class="tm-navbar uk-navbar uk-navbar-attached" style="background-color: #222">
+			<div class="uk-container uk-container-center">
+				<a class="uk-navbar-brand uk-hidden-small" href="../index.html">페이지를 작게키세요</a>
+				<a href="#tm-offcanvas" class="uk-navbar-toggle uk-visible-small" data-uk-offcanvas></a>
+				<div class="uk-navbar-brand uk-navbar-center" style="color: white;">
+					<a href = "index.html" style="color: white;">Silver's Luck</a>
+				</div>
+			</div>
+			<!-- This is the off-canvas sidebar -->
+			<!-- This is the off-canvas sidebar -->
+            <div id="tm-offcanvas" class="uk-offcanvas">
+                <div class="uk-offcanvas-bar">
+                    <ul class="uk-nav uk-nav-offcanvas" data-uk-nav>
+                        <li><a href="#">Site Menu</a></li>
+                        <li><a href="birthunse.html">- 생년월일 운세</a></li>
+                        <li ><a href="ddiunse.html">- 띠별 운세</a></li>
+                        <li ><a href="bjrunse.html">- 별자리 운세</a></li>
+                        <li><a href="otherunse.html">- 그밖의 운세</a></li>
+                        <li><a href="appendix.html">- Appendix</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        </div>
+
+		<div style="background-color: #aabb99;">
+
+			<?php
+			// define variables and set to empty values
+			$nameErr = $birthErr= "";
+			$name = $birth = "";
+
+			if ($_SERVER["REQUEST_METHOD"] == "POST") {
+			if (empty($_POST["name"])) {
+			$nameErr = "이름을 입력하시오.";
+			} else {
+			$name = test_input($_POST["name"]);
+			// check if name only contains letters and whitespace
+			if (!preg_match("/^[a-zA-Z ]*$/",$name)) {
+			$nameErr = "영어이름만 가능합니다.";
+			}
+			}
+
+			if (empty($_POST["birth"])) {
+			$birthErr = "생년월일을 입력하시오.";
+			} else {
+			$birth = test_input($_POST["birth"]);
+			// 생년월일 체크 구문
+			if (!preg_match("/^[0-9 ]*$/",$birth) || $birth>99999999) {
+			$birthErr = "올바르지않은 생년월일입니다.";
+			}
+			}
+			}
+			/*
+			else
+			echo $_SERVER["REQUEST_METHOD"];
+			*/
+
+			function test_input($data) {
+			$data = trim($data);
+			//$data = stripslashes($data); //backslash 문자 처리
+			$data = htmlspecialchars($data); //특수문자르 html 코팅함 (> ==> &gt;)
+			return $data;
+			}
+			?>
+
+			<center>
+				<h2> 운세를 점칠 생년월일을 기입하세요.</h2>
+			</center>
+			<p>
+				<span class="error">* 별표는 필수사항입니다.</span>
+			</p>
+			<form method="post" action="<?php echo $_SERVER["PHP_SELF"]; ?>">
+				Name:
+				<input type="text" name="name" value="<?php echo $name;?>">
+				<span class="error">* <?php echo $nameErr;?></span>
+				<br>
+				<br>
+				Birth:
+				<input type="text" name="birth" value="<?php echo $birth;?>">
+				<span class="error">* <?php echo $birthErr;?></span>
+				<br>
+				ex)1991년 7월 10일 -> 19910710
+				<br>
+				<br>
+				<input type="submit" name="submit" value="운세보기">
+			</form>
+
+			<?php
+			echo "<h2>당신의 운세는 :</h2>";
+			echo ($name."씨 안녕하세요.");
+			echo "
+			<br>
+			";
+			echo "당신의 생일은 ";
+			echo (int)($birth/10000);
+			echo "년";
+			echo (int)(($birth%10000)/100);
+			echo "월";
+			echo (int)(($birth%10000)%100);
+			echo "일";
+			echo "입니다.";
+			echo "
+			<br>
+			";
+			echo "따라서 당신의 운세는 ";
+
+			$zodiac = array();
+			$zodiac[0] = "쥐";$zodiac[1] = "소";$zodiac[2] = "호랑이";$zodiac[3] = "토끼";
+			$zodiac[4] = "용";$zodiac[5] = "뱀";$zodiac[6] = "말";$zodiac[7] = "양";
+			$zodiac[8] = "원숭이";$zodiac[9] = "닭";$zodiac[10] = "개";$zodiac[11] = "돼지";
+
+			echo "'";
+			echo $zodiac[((int)($birth/10000)%100) % 12];
+			echo "'";
+			echo "띠 이고 ";
+			$asterism = array();
+			$asterism[0] = "물병";$asterism[1] = "물고기";$asterism[2] = "양";$asterism[3] = "황소";
+			$asterism[4] = "쌍둥이";$asterism[5] = "게";$asterism[6] = "사자";$asterism[7] = "처녀";
+			$asterism[8] = "천칭";$asterism[9] = "전갈";$asterism[10] = "사수";$asterism[11] = "염소";
+
+			echo "'";
+			
+			$month  = (int)(($birth%10000)/100);
+			$day = (int)(($birth%10000)%100);
+			if($month == 1) //1월
+			{
+			if($day >=20)
+				echo $asterism[0];
+			else if($day <20)
+				echo $asterism[11];
+			}
+			else if($month == 2) //2월
+			{
+				if($day <=19)
+					echo $asterism[0];
+				else if($day >19)
+					echo $asterism[1];
+			}
+			else if($month == 3) //3월
+			{
+				if($day < 21 )
+					echo $asterism[1];
+				else if($day >=21)
+					echo $asterism[2];
+			}
+			else if($month == 4) //4월
+			{
+				if($day < 20 )
+					echo $asterism[2];
+				else if($day >=20)
+					echo $asterism[3];
+			}
+			else if($month == 5) //5월
+			{
+				if($day < 21 )
+					echo $asterism[3];
+				else if($day >=21)
+					echo $asterism[4];
+			}
+			else if($month == 6) //6월
+			{
+				if($day < 22 )
+					echo $asterism[4];
+				else if($day >=22)
+					echo $asterism[5];
+			}
+			else if($month == 7) //7월
+			{
+				if($day < 23 )
+					echo $asterism[5];
+				else if($day >=23)
+					echo $asterism[6];
+			}
+			else if($month == 8) //8월
+			{
+				if($day < 23 )
+					echo $asterism[6];
+				else if($day >=23)
+					echo $asterism[7];
+			}
+			else if($month == 9) //9월
+			{
+				if($day < 24 )
+					echo $asterism[7];
+				else if($day >=24)
+					echo $asterism[8];
+			}
+			else if($month == 10) //10월
+			{
+				if($day < 23 )
+					echo $asterism[8];
+				else if($day >=23)
+					echo $asterism[9];
+			}
+			else if($month == 11) //11월
+			{
+				if($day < 23 )
+					echo $asterism[9];
+				else if($day >=23)
+					echo $asterism[10];
+			}
+			else if($month == 12) //12월
+			{
+				if($day < 25 )
+					echo $asterism[10];
+				else if($day >=25)
+					echo $asterism[11];
+			}
+			
+			echo "'";
+			echo "자리 입니다.";
+			echo "<br>메뉴에서 해당 페이지를 찾아가세요";
+			
+			?>
+
+		</div>
+
+		<br>
+		<br>
+
+		<div class="tm-footer" style="background-color: #222">
+			<div class="uk-container uk-container-center uk-text-center">
+				<ul class="uk-subnav uk-subnav-line uk-flex-center"></ul>
+			</div>
+			<center>
+				<h3>본 페이지는 모바일환경에 최적화되어있습니다.</h3>
+			</center>
+			<center>
+				<h4>브라우져 이용자는 페이지 크기를 줄이십시오.</h4>
+			</center>
+		</div>
+
+	</body>
+</html>
