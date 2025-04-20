@@ -1,0 +1,204 @@
+<?php
+
+// 로그인 체크 
+session_start();
+if(empty($_SESSION[user_id])){
+    header("Location:login.html");
+    exit;
+}
+
+require_once './server/db_connect.php';
+extract($_GET);
+$query = "SELECT * FROM siren_order_menu WHERE seq = ${seq} ";
+$result = mysql_query($query);
+$array = mysql_fetch_array($result);
+extract($array);
+
+
+?>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>QR</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="./css/uikit.almost-flat.min.css" />
+    <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
+    <script src="./js/uikit.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/jquery.slick/1.5.9/slick.css" />
+    <link rel="stylesheet" type="text/css" href="./slick/slick-theme.css" />
+    <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.slick/1.5.9/slick.min.js"></script>
+    <style>
+    .slideshow p {
+        text-align: center;
+        color: white;
+    }
+    </style>
+</head>
+
+<body class="uk-height-1-1" style="background-color: #593C1F;">
+    <nav class="tm-navbar uk-navbar uk-navbar-attached" style="background-color: #222">
+        <div class="uk-container uk-container-center">
+            <a class="uk-navbar-brand uk-hidden-small" href="../index.html">요기 주문이요!</a>
+            <a href="#tm-offcanvas" class="uk-navbar-toggle uk-visible-small" data-uk-offcanvas></a>
+            <div class="uk-navbar-brand uk-navbar-center" style="color: white;">요기 주문이요</div>
+        </div>
+        <!-- This is the off-canvas sidebar -->
+        <div id="tm-offcanvas" class="uk-offcanvas">
+            <div class="uk-offcanvas-bar">
+                <ul class="uk-nav uk-nav-offcanvas" data-uk-nav>
+                        <li><a href="#">여기 주문이요!</a></li>
+                        <li><a href="coupon.html">My Coupon</a></li>
+                        <li class="uk-active"><a href="order.html">주문하기</a></li>
+                        <li ><a href="cart.html">장바구니</a></li>
+                        <li><a href="order_history.html">히스토리</a></li>
+                        <li><a href="./menu.html">로그아웃</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="tm-middle">
+        <div class="uk-container uk-container-center" style="text-align: center; min-height: 700px;">
+            <div class="uk-cover-background">
+                <img src="./images/<?=$image?>" />
+            </div>
+            <div class="uk-block" style="color: white;">
+                <?=$menu_name?> /
+                    <?=$cal?>Cal</div>
+            <div class="uk-panel uk-panel-box uk-panel-box-primary" style="margin-top: 10px;">
+                <?=$info?>
+            </div>
+            <div class="uk-panel uk-panel-box uk-panel-box-success" style="margin-top: 10px;">
+                <?=number_format($price)?>원</div>
+            <div class="uk-form-row" style="margin-top: 20px;">
+                <legend style="color:white; font-weight: bold;">수량 (1잔)</legend>
+                <input class="uk-width-1-1 uk-form-large" type="range" min="1" max="10" id="cup" name="cup" value="1" placeholder="수량" autocomplete="on" autofocus required="">
+            </div>
+            <span id="price" style="color:white; font-weight: bold; font-size: 24px; margin-top: 10px;"><?=number_format($price)?>원</span>
+            <form class="uk-form" id="frm" action="./server/order.php" method="post">
+                <input value="" type="hidden" name="flag" id="flag">
+                <input value="<?=$seq?>" type="hidden" name="seq" id="seq">
+                <input value="<?=session_id()?>" type="hidden" name="cart_id" id="cart_id">
+                <input value="" type="hidden" name="option" id="option">
+                <input value="hot" type="hidden" name="hot_iced" id="hot_iced">
+                <select id="size" name="size" class="uk-form-large" style="width:80%; margin: 8px;">
+                    <option selected="selected">사이즈</option>
+                    <option value="Regular">Regular</option>
+                    <option value="Large">Large</option>
+                </select>
+                <select id="cup" name="cup" class="uk-form-large" style="width:80%; margin: 8px;">
+                    <option selected="selected">컵선택</option>
+                    <option value="일회용컵">일회용컵</option>
+                    <option value="머그컵">머그컵</option>
+                    <option value="개인컵">개인컵</option>
+                </select>
+                <a class="uk-width-1-2 uk-button uk-button-default uk-button-large" href="#personal" data-uk-modal style="width:80%; margin: 8px;">퍼스널 옵션</a>
+            </form>
+            <div class="uk-button-group" style="width: 100%;">
+                <a class="uk-width-1-2 uk-button uk-button-danger uk-button-large" style="width:40%; margin: 8px;"  href="javascript:;">HOT</a>
+                <a style="width:40%; margin: 8px;" class="uk-width-1-2 uk-button uk-button-primary uk-button-large" href="javascript:;">ICE</a>
+            </div>
+        </div>
+        <a class="uk-width-1-1 uk-button uk-button-success uk-button-large" id="cartBtn" href="#" style="margin-top: 16px;">담기</a>
+        <a class="uk-width-1-1 uk-button uk-button-success uk-button-large" id="orderBtn" href="#" style="margin-top: 16px;">주문하기</a>
+    </div>
+    </div>
+    <div class="tm-footer" style="background-color: #222">
+        <div class="uk-container uk-container-center uk-text-center">
+            <ul class="uk-subnav uk-subnav-line uk-flex-center">
+                <div class="uk-panel">
+                </div>
+            </ul>
+        </div>
+    </div>
+    <!-- This is the modal -->
+    <div id="personal" class="uk-modal">
+        <div class="uk-modal-dialog uk-modal-dialog-blank">
+            <form class="uk-form" style="text-align: center;">
+                <select id="shot" name="shot" class="uk-form-large" style="width:80%; margin: 8px;">
+                    <option selected="selected" value="">샷</option>
+                    <option value="">No</option>
+                    <option value="샷추가 ">샷추가</option>
+                </select>
+                <select id="sirup" name="sirup" class="uk-form-large" style="width:80%; margin: 8px;">
+                    <option selected="selected" value="">시럽</option>
+                    <option value="">No</option>
+                    <option value="헤이즐넛시럽 ">헤이즐넛시럽</option>
+                    <option value="바닐라시럽 ">바닐라시럽</option>
+                    <option value="카라멜시럽 ">카라멜시럽</option>
+                </select>
+                <select id="whipping" name="whipping" class="uk-form-large" style="width:80%; margin: 8px;">
+                    <option selected="selected" value="">휘핑</option>
+                    <option value="">No</option>
+                    <option value="휘핑추가 ">휘핑추가</option>
+                </select>
+                <select id="drizzle" name="drizzle" class="uk-form-large" style="width:80%; margin: 8px;">
+                    <option selected="selected" value="">드리즐</option>
+                    <option value="">No</option>
+                    <option value="초코드리즐">초코드리즐</option>
+                    <option value="카라멜드리즐">카라멜드리즐</option>
+                </select>
+            </form>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+$('.slideshow').slick({
+    dots: true,
+    infinite: true,
+    speed: 300,
+    slidesToShow: 1,
+    adaptiveHeight: true
+});
+
+$(".uk-button-group a").on('click', function(){
+    if($(this).index() == 0){
+        $("#hot_iced").val("hot");
+    }else{
+        $("#hot_iced").val("iced");
+    }
+});
+
+/**
+ * 담기 버튼 
+ */
+$("#cartBtn").on('click', function(){
+    var shot = $("#shot").val();
+    var whipping = $("#whipping").val();
+    var sirup = $("#sirup").val();
+    var drizzle = $("#drizzle").val();
+    $("#flag").val("cart");
+    $("#option").val(shot + whipping + sirup + drizzle);
+    $("#frm").submit();
+});
+
+$("#orderBtn").on('click', function(){
+    var shot = $("#shot").val();
+    var whipping = $("#whipping").val();
+    var sirup = $("#sirup").val();
+    var drizzle = $("#drizzle").val();
+    $("#flag").val("order");
+    $("#option").val(shot + whipping + sirup + drizzle);
+    $("#frm").submit();
+});
+
+var price = parseInt('<?=$price?>');
+$("#cup").on('change', function() {
+    $("#price").text(price * $(this).val() + "원");
+    $(this).prev().text("수량 (" + $(this).val() + "잔)");
+});
+
+$("#orderBtn").on('click', function() {
+    $("#price").text(price * $(this).val() + "원");
+    $(this).prev().text("수량 (" + $(this).val() + "잔)");
+});
+
+
+
+</script>
+
+</html>

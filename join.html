@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>QR</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="css/uikit.almost-flat.min.css" />
+    <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.26.1/js/uikit.min.js"></script>
+    <style>
+    *, legend, a, {
+        color: white;
+    }
+    .uk-notify  { background-color: #FFF; color: #111;}
+    input {color: #111 !important; }
+    </style>
+</head>
+
+<body class="uk-height-1-1" style="background-color: #593C1F; ">
+    <nav class="tm-navbar uk-navbar uk-navbar-attached" style="background-color: #222">
+        <div class="uk-container uk-container-center">
+            <a class="uk-navbar-brand uk-hidden-small" href="../index.html"><img class="uk-margin uk-margin-remove" src="images/logo_uikit.svg" width="90" height="30" title="UIkit" alt="여기주문요"></a>
+            <div class="uk-navbar-brand uk-navbar-center" style="color: white;">요기주문요</div>
+        </div>
+    </nav>
+    <div class="uk-vertical-align uk-text-center uk-height-1-1">
+        <div class="uk-cover-background">
+            <img src="http://1.bp.blogspot.com/-AGdMdfvtPbQ/Vae-YAhtnVI/AAAAAAAAFRg/OPKwgGBVzTA/s1600/coffee-and-breakfast1.png" />
+        </div>
+        <div class="uk-vertical-align-middle" style="width: 300px;">
+            <div class=".uk-width-large-1-1 .uk-visible-large">
+                <form class="uk-form" id="frm" action="./server/join.php" method="post" style="text-align: center; min-height: 400px;">
+                    <fieldset>
+                        <legend>회원가입</legend>
+                        <form class="uk-panel uk-panel-box uk-form">
+                            <div class="uk-form-row">
+                                <input id="user_id" name="user_id" class="uk-width-1-1 uk-form-large" type="text" placeholder="아이디" required autofocus="autofocus">
+                            </div>
+                            <div class="uk-form-row">
+                                <input id="user_name" name="user_name" class="uk-width-1-1 uk-form-large" type="text" placeholder="이름" required autofocus="autofocus">
+                            </div>
+                            <div class="uk-form-row">
+                                <input id="pwd" name="pwd"  class="uk-width-1-1 uk-form-large" type="password" pattern=".{6,}" placeholder="비밀번호" required autofocus="autofocus">
+                            </div>
+                            <div class="uk-form-row">
+                                <input id="rePwd" name="rePwd" class="uk-width-1-1 uk-form-large" type="password" pattern=".{6,}" placeholder="비밀번호 확인" required autofocus="autofocus">
+                            </div>
+                            <div class="uk-form-row">
+                                <input id="user_email" name="user_email" class="uk-width-1-1 uk-form-large" type="email" placeholder="이메일" required autofocus="autofocus">
+                            </div>
+                            <div class="uk-form-row">
+                                <a class="uk-width-1-1 uk-button uk-button-primary uk-button-large" href="javascript:;" id="joinBtn">가입</a>
+                            </div>
+                            <div class="uk-form-row uk-text-small">
+                                <label class="uk-float-left">
+                                <a class="uk-float-right uk-link uk-link-muted"  style="color: white;" href="login.html">로그인</a>
+                            </div>
+                    </fieldset>
+                    </form>
+            </div>
+        </div>
+        <div class="tm-footer" style="background-color: #222">
+            <div class="uk-container uk-container-center uk-text-center">
+                <ul class="uk-subnav uk-subnav-line uk-flex-center">
+                    <div class="uk-panel">
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </div>
+    </div>
+</body>
+<script src="./js/components/notify.js"></script>
+<script>
+/**
+ * 가입버튼
+ */
+$("#joinBtn").on('click', function(){
+
+	var userId = $("#user_id").val();
+	if(!userId){
+		 UIkit.notify('아이디를 입력하세요.');
+		 return;
+	}
+	
+	var userName = $("#user_name").val();
+	if(!userName){
+		 UIkit.notify('이름을 입력하세요.');
+		 return;
+	}
+	
+	var pwd = $("#pwd").val();
+	if(!pwd){
+		 UIkit.notify('비밀번호를 입력하세요.');
+		 return;
+	}
+	
+	var rePwd = $("#rePwd").val();
+	if(!rePwd){
+		 UIkit.notify('비밀번호 확인을 입력하세요.');
+		 return;
+	}	
+	
+	if(pwd != rePwd){
+		 UIkit.notify('비밀번호가 다릅니다.');
+		 return;
+	}		
+	
+	var user_email = $("#user_email").val();
+	if(!user_email){
+		 UIkit.notify('이메일을 입력하세요.');
+		 return;
+	}
+	
+	
+	$("#frm").submit();
+	
+			
+});
+</script>
+</html>

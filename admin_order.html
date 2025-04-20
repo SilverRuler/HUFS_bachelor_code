@@ -1,0 +1,102 @@
+<?php
+
+// 로그인 체크 
+session_start();
+if(!$_SESSION[login]){
+    header("Location:login.html");
+    exit;
+}
+
+require_once './server/db_connect.php';
+$user_id = $_SESSION['user_id'];
+$query = "SELECT * FROM siren_order_order o, siren_order_menu m
+            WHERE 1=1
+                AND o.menu_seq = m.seq 
+                AND type_flag = 'o'
+            ORDER BY order_datetime DESC ";
+
+$result = mysql_query($query);
+
+$html  = "";
+while($array = mysql_fetch_array($result)){
+    extract($array);
+
+    $html .= "<div class='uk-panel uk-panel-box' style='margin: 8px;'>
+                    <div class='uk-panel-teaser'>
+                        <img src='./images/{$image}' alt='{$menu_name}'>
+                        <h4>주문자 : {$user_id}</h4>
+                        <p>{$menu_name}</p>
+                        <p>{$menu_option}</p>
+                        <p>{$cup}, {$hot_iced}, {$size}</p>
+                    </div>
+                </div>";
+}
+
+
+?>
+    <!DOCTYPE html>
+    <html>
+
+    <head>
+        <title>QR</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" href="css/uikit.almost-flat.min.css" />
+        <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.26.1/js/uikit.min.js"></script>
+        <style>
+        h1 {
+            color: white;
+        }
+        </style>
+    </head>
+
+    <body class="uk-height-1-1" style="background-color: #593C1F;">
+        <nav class="tm-navbar uk-navbar uk-navbar-attached" style="background-color: #222">
+            <div class="uk-container uk-container-center">
+                <a class="uk-navbar-brand uk-hidden-small" href="../index.html"><img class="uk-margin uk-margin-remove" src="images/logo_uikit.svg" width="90" height="30" title="UIkit" alt="UIkit"></a>
+                <div class="uk-navbar-brand uk-navbar-center" style="color: white;">요기주문요</div>
+            </div>
+            <!-- This is the off-canvas sidebar -->
+            <div id="tm-offcanvas" class="uk-offcanvas">
+                <div class="uk-offcanvas-bar">
+                    <ul class="uk-nav uk-nav-offcanvas" data-uk-nav>
+                        <li><a href="#">여기 주문이요!</a></li>
+                        <li><a href="coupon.html">My Coupon</a></li>
+                        <li class="uk-active"><a href="order.html">주문하기</a></li>
+                        <li><a href="components.html">장바구니</a></li>
+                        <li><a href="customizer.html">히스토리</a></li>
+                        <li><a href="menu.html">로그아웃</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="uk-vertical-align uk-text-center uk-height-1-1">
+            <div class="uk-cover-background">
+                <img src="http://1.bp.blogspot.com/-AGdMdfvtPbQ/Vae-YAhtnVI/AAAAAAAAFRg/OPKwgGBVzTA/s1600/coffee-and-breakfast1.png" />
+            </div>
+            <div class="uk-vertical-align-middle" style="width: 80%; height: 100%; margin-top: 30px;">
+            	                <a id="qrcode" class="uk-width-1-1 uk-button uk-button-success uk-button-large" href="javascript:;" style="margin-top: 16px;">QR스캔</a>
+                <h1>전체 주문내역</h1>
+                <?=$html?>
+            </div>
+        </div>
+        <div class="tm-footer" style="background-color: #222">
+            <div class="uk-container uk-container-center uk-text-center">
+                <ul class="uk-subnav uk-subnav-line uk-flex-center">
+                </ul>
+            </div>
+        </div>
+    </body>
+<script>
+$("#qrcode").on('click', function(){
+	if(window.android){
+		android.qrcode();
+	}
+	
+});
+</script>
+    </html>
