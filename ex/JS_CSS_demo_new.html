@@ -1,0 +1,163 @@
+﻿<html>
+<head>
+<style>
+        #box1 { 
+		   width:600px; height:120px; visibility:visible; background-color:#ffff00; margin-top: -20px;}
+        #box2 { width:600px; height:60px; visibility:visible; background-color:#00fF00; margin-top: 20px;}
+
+<!-- 텍스트의 모양새를 나타내는부분 -->
+<!-- 아이디가 box1 인 애들에 대해 적용, 내용은 CSS코드 -->
+		.center { 
+           text-align: center;
+           color: red;
+        }
+<!-- 센터라고 클래스를갖는애들은 모두 적용-->
+<!-- id.class 명-->
+<!-- div p  :  밑에 같은애들 적용-->
+/*
+<div>
+< p ~~~>
+</div>
+*/
+		h2, h3 {
+          text-align: center;
+          color: green;
+        }
+
+
+        .pcss {
+		 color: yellow;
+		}
+
+//p택인데 클래스가 pcss를 가진. 그런택에대해서만 적용
+	    p.pcss {
+          text-align: center;
+          color: blue;
+        }
+//div택안에 p택인데 그중에서도 pcss에 대해 적용
+		div p.pcss {
+          color: pink;
+		}
+
+}
+
+
+</style>
+
+<script>
+
+function doBlink() { 
+
+<!--블링크 택을 가지는애들 모두 잡아서 blink 배열에 대입 -->
+/*
+  var blinks = document.getElementsByTagName('blink');
+
+  for(var i=0; i < blinks.length; i++)
+      blinks[i].style.visibility = (blinks[i].style.visibility == "visible" ? "hidden":"visible"); 
+*/
+
+  var blink = document.getElementById('blink');
+
+  blink.style.visibility = (blink.style.visibility == "visible" ? "hidden":"visible"); 
+
+}
+
+
+function startBlink() { 
+  <!--제대로 문서가 호출되면 다큐먼트가 널이아님 -->
+   if (document) {
+      //alert('in startBlink');  
+      setInterval("doBlink()",1000) // 깜박이는 속도 
+   }
+
+} 
+
+window.onload = startBlink();
+<!-- 브라우저가 시작될때자동으로 온로드가 발생-->
+
+</script>
+</head>
+
+
+<body>
+<center><h1>JS Test</h1></center>
+<blink id="blink" style="color:blue; visibility:visible;"> 서로 돕고 선하게 삽시다</blink>
+
+<p>
+<hr>
+
+
+<p>
+
+<center><h1>CSS style tag 사용예 (id 이용) </h1></center>
+
+<div id="box1">고조선(古朝鮮, ? ~ 기원전 108년)은 한국의 역사상 최초의 
+고대 국가다.[1] 본래 국호는 조선(朝鮮)이나, 일반적으로 14세기 말 이성계(李成桂)가 
+건국한 같은 이름의 왕조(조선)와의 구분을 위해 '고조선'이라 부른다. 문헌상의 기록에 
+따라 실존했던 국가라는 사실은 분명하지만 연대와 강역 · 역사 · 
+문화 등과 관련된 기록이 적고 추상적이고 모호하며 직접적으로 고조선의 것이라 암시하는 유물·
+유적이 발견되지 않았기 때문에 이들에 대해서는 많은 논란이 있다.[2]</div>
+
+<div id="box2">대한민국의 역사학계는 일반적으로
+ 청동기 문명을 기반으로 하여 만주 및 한반도에 
+]있던 고대 국가라고 파악하고 있다.[3][4][5]</div>
+
+<p>
+<hr>
+
+<center><h1>CSS style tag 사용예 (class, tag, 계층구조 이용) </h1></center>
+
+<p class="center">평범한 사람은 안전을 꿈꾸며 비범하는 사람은 도전을 꿈군다</p>
+<div class="center">한비자에 이르길, 행지도(行之道)라 했다.</div>
+
+
+<h2>행복의 문이 하나 닫히면 다른 문이 열린다 그러나 우리는 종종 닫힌 문을 멍하니 바라보다가
+ 우리를 향해 열린 문을 보지 못하게 된다  - 헬렌켈러</h2>
+
+<h3>하루에 3시간을 걸으면 7년 후에 지구를 한바퀴 돌 수 있다. 
+-사무엘존슨 </h3>
+
+
+<div class="pcss">미래는 인터넷 세상. </div>
+
+<p class="pcss" >먼저 핀 꽃은 먼저진다  남보다 먼저 공을 세우려고 조급히 서둘것이 아니다 - 채근담 
+</p>
+<p class="pcss">내일은 내일의 태양이 뜬다 </p>
+
+
+<div >
+<p class="pcss"> 성공의 비결은 단 한 가지, 잘할 수 있는 일에 광적으로 집중하는 것이다. 
+ </p>
+</div>
+
+
+<hr>
+
+<center><h1>CSS style tag 사용예 (inherit 이용) </h1></center>
+
+<style>
+span {
+    color: blue;
+    border: 1px solid black;
+}
+.extra span {
+    color: inherit; //부모의 칼라를 그대로 물려받아라.
+}
+</style>
+
+
+<div style="font-size:24px">
+Here is <span>a span element</span> which is blue, as span elements are set to be.
+</div>
+
+<div class="extra" style="color:green; font-size:24px">
+Here is <span>a span element</span> which is green, because it inherits from its parent.
+</div>
+
+<div style="color:red; font-size:24px">
+Here is <span>a span element</span> which is blue, as span elements are set to be.
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,71 @@
+﻿<html>
+<head>
+<style>
+        #box1 { width:600px; height:60px; visibility:hidden; background-color:#00fF00; margin-top: -20px;}
+        #box2 { width:600px; height:60px; visibility:visible; background-color:#00fF00; }
+</style>
+
+<script>
+
+function doBlink() { 
+
+  var blinks = document.getElementsByTagName('blink');
+
+  //alert('length=' + blinks.length);
+
+  //if(blinks[0].style.visibility =="visible")
+  //  blinks[0].style.visibility = "hidden";
+  //else
+  //   blinks[0].style.visibility = "visible";
+
+  for(var i=0; i < blinks.length; i++)
+      blinks[i].style.visibility = (blinks[i].style.visibility == "visible" ? "hidden":"visible"); 
+
+}
+
+
+function startBlink() {
+    //현재 문서안에들어있는 각종 내용물 웹문서 자체를 접근해서 
+    //어떤태그가있는지 어떤밸류가있는지 코드상에서알아낼수잇다.
+  ///
+   if (document) {
+      //alert('in startBlink');  /<--디버깅용 알람
+      setInterval("doBlink()",1000) // 깜박이는 속도 
+   }
+
+}
+
+window.onload = startBlink(); //call 하는 함수
+//로드라는 이벤트가 저절로발생해서처리해서 처리해야할 일.
+
+
+</script>
+</head>
+
+
+<body>
+<center><h1>JS Test</h1></center>
+<blink id="blink" style="color:blue; visibility:visible;"> 서로 돕고 선하게 삽시다</blink>
+
+<p>
+<hr>
+
+
+<p>
+<center><h1>CSS style tag 사용예</h1></center>
+
+<div id="box1">고조선(古朝鮮, ? ~ 기원전 108년)은 한국의 역사상 최초의 
+고대 국가다.[1] 본래 국호는 조선(朝鮮)이나, 일반적으로 14세기 말 이성계(李成桂)가 
+건국한 같은 이름의 왕조(조선)와의 구분을 위해 '고조선'이라 부른다. 문헌상의 기록에 
+따라 실존했던 국가라는 사실은 분명하지만 연대와 강역 · 역사 · 
+문화 등과 관련된 기록이 적고 추상적이고 모호하며 직접적으로 고조선의 것이라 암시하는 유물·
+유적이 발견되지 않았기 때문에 이들에 대해서는 많은 논란이 있다.[2]</div>
+
+<div id="box2">대한민국의 역사학계는 일반적으로
+ 청동기 문명을 기반으로 하여 만주 및 한반도에 
+]있던 고대 국가라고 파악하고 있다.[3][4][5]</div>
+
+
+</body>
+
+</html>

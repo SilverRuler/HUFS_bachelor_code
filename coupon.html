@@ -1,0 +1,75 @@
+
+<?php
+
+session_start();
+if(empty($_SESSION['user_id'])){
+    header("Location:login.html");
+    exit;
+}
+
+require_once './server/db_connect.php';
+$user_id = $_SESSION['user_id'];
+$sql = "SELECT * FROM siren_order_coupon WHERE  user_id = '{$user_id}' ";
+$result = mysql_query($sql);
+
+$array = mysql_fetch_array($result);
+$data = "coupon_user_id_".$user_id;
+?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>QR</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" href="css/uikit.almost-flat.min.css" />
+        <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.26.1/js/uikit.min.js"></script>
+        <style>
+        </style>
+    </head>
+    <body class="uk-height-1-1" style="background-color: #593C1F;">
+        <nav class="tm-navbar uk-navbar uk-navbar-attached" style="background-color: #222">
+            <div class="uk-container uk-container-center">
+                <a class="uk-navbar-brand uk-hidden-small" href="../index.html"><img class="uk-margin uk-margin-remove" src="images/logo_uikit.svg" width="90" height="30" title="UIkit" alt="UIkit"></a>
+                <a href="#tm-offcanvas" class="uk-navbar-toggle uk-visible-small" data-uk-offcanvas></a>
+                <div class="uk-navbar-brand uk-navbar-center" style="color: white;">요기주문요</div>
+            </div>
+            <!-- This is the off-canvas sidebar -->
+            <div id="tm-offcanvas" class="uk-offcanvas">
+                <div class="uk-offcanvas-bar">
+                    <ul class="uk-nav uk-nav-offcanvas" data-uk-nav>
+                        <li><a href="#">여기 주문이요!</a></li>
+                        <li><a href="coupon.html">My Coupon</a></li>
+                        <li class="uk-active"><a href="order.html">주문하기</a></li>
+                        <li ><a href="cart.html">장바구니</a></li>
+                        <li><a href="order_history.html">히스토리</a></li>
+                        <li><a href="./menu.html">로그아웃</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        
+        <div class="uk-vertical-align uk-text-center uk-height-1-1" >
+            <div class="uk-vertical-align-middle" style="width: 400px; min-height: 500px;">
+                <div class="uk-cover-background">
+                    <?php if(@$array['coupon'] >= 10){ ?>
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=<?=$data?>" />
+                    <? } ?>
+                </div>
+                
+                <div class="uk-block uk-block-primary"><h1 style="color: white;">현재쿠폰 <?=$array['coupon']?>장</h1></div>
+                <div class="uk-block uk-block-default" style="height: 300px;">쿠폰은 10장마다 사용하실수 있습니다.</div>
+                <a href="order_history.html" class="uk-button uk-width-1-1 uk-button-large uk-button-success">적립내역</a>
+            </div>
+        </div>
+        <div class="tm-footer" style="background-color: #222">
+            <div class="uk-container uk-container-center uk-text-center">
+                <ul class="uk-subnav uk-subnav-line uk-flex-center">
+                </ul>
+            </div>
+        </div>
+    </body>
+</html>

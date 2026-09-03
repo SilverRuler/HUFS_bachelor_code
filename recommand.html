@@ -1,0 +1,115 @@
+<?php
+
+session_start();
+if(!$_SESSION[login]){
+    header("Location:login.html");
+}
+
+require_once './server/db_connect.php';
+$query = "SELECT * FROM siren_order_menu
+WHERE recommand = 'Y'
+ORDER BY seq DESC ";
+$result = mysql_query($query);
+$html  = "";
+while($array = mysql_fetch_array($result)){
+    extract($array);
+    $html .= "<div><a href='detail.html?seq=${seq}'>
+        <img src='./images/{$image}'  width='100%' height='200px' alt=''>
+        <h5 style='color:white;'>{$menu_name}</h5>
+        <p>{$info}</p></a>
+    </div>";
+
+}
+?>
+<!DOCTYPE html>
+<html>
+<head>
+<title>QR</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta content="text/html; charset=UTF-8" />
+<link rel="stylesheet" href="./css/uikit.almost-flat.min.css" />
+<script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
+<script src="./js/uikit.min.js"></script>
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/jquery.slick/1.5.9/slick.css"/>
+<link rel="stylesheet" type="text/css" href="./slick/slick-theme.css" />
+
+<script type="text/javascript" src="//cdn.jsdelivr.net/jquery.slick/1.5.9/slick.min.js"></script>
+<style>
+.slideshow p {text-align: center; color: white;}
+.uk-button{margin:  8px 0px;}
+</style>
+</head>
+    <body class="uk-height-1-1" style="background-color: #593C1F;">
+        <nav class="tm-navbar uk-navbar uk-navbar-attached" style="background-color: #222">
+            <div class="uk-container uk-container-center">
+                <a class="uk-navbar-brand uk-hidden-small" href="../index.html">요기 주문이요!</a>
+                <a href="#tm-offcanvas" class="uk-navbar-toggle uk-visible-small" data-uk-offcanvas></a>
+                <div class="uk-navbar-brand uk-navbar-center" style="color: white;">요기주문요</div>
+            </div>
+            <!-- This is the off-canvas sidebar -->
+            <div id="tm-offcanvas" class="uk-offcanvas">
+                <div class="uk-offcanvas-bar">
+                    <ul class="uk-nav uk-nav-offcanvas" data-uk-nav>
+                        <li><a href="#">여기 주문이요!</a></li>
+                        <li><a href="coupon.html">My Coupon</a></li>
+                        <li class="uk-active"><a href="order.html">주문하기</a></li>
+                        <li ><a href="cart.html">장바구니</a></li>
+                        <li><a href="order_history.html">히스토리</a></li>
+                        <li><a href="./menu.html">로그아웃</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+<div class="tm-middle">
+    <div class="uk-container uk-container-center" style="text-align: center; min-height: 700px;">
+        <div class="slideshow uk-overlay-active"  data-uk-slideshow="{animation: 'scroll'}">
+            <?=$html?>
+        </div>
+        <a href="" data-uk-slideshow-item="previous"></a>
+        <a href="" data-uk-slideshow-item="next"></a>
+
+        <a class="uk-width-1-1 uk-button uk-button-danger uk-button-large"  href="order.html">메뉴선택</a>
+    	<a class="uk-width-1-1 uk-button uk-button-default uk-button-large" id="loginBtn" href="cart.html">장바구니</a>
+    	<a class="uk-width-1-1 uk-button uk-button-default uk-button-large"  href="order_history.html">히스토리</a>
+    </div>
+</div>
+
+<div class="tm-footer" style="background-color: #222">
+    <div class="uk-container uk-container-center uk-text-center">
+        <ul class="uk-subnav uk-subnav-line uk-flex-center">
+            <div class="uk-panel">
+            </div>
+        </ul>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+$(function(){
+
+	$('.slideshow').slick({
+		dots: true,
+		infinite: true,
+		speed: 300,
+		slidesToShow: 1,
+		adaptiveHeight: true
+	});
+
+
+	$("#qr").on('click', function(){
+		if(window.android){
+			window.android.qr();
+		}
+	});
+
+
+
+});
+
+
+
+</script>
+</html>
